@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="mm">
+    <input type="text" id="mm2">
+    <button onclick="send()">Send</button>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <script>
+    function send() {
+    	Email.send({
+    	Host: "smtp.gmail.com",
+    	Username : "projectvir2@gmail.com",
+    	Password : "Projectvir1@",
+    	To : 'kingvirat70@gmail.com',
+    	From : 'karthik01233@gmail.com',
+    	Subject : "Demo",
+    	Body : "First",
+    	}).then(
+    		message => alert("mail sent successfully")
+    	);
+    }
+    </script>
+</body>
+</html>
