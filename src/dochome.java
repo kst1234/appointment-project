@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,16 +16,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class docadd
+ * Servlet implementation class dochome
  */
-@WebServlet("/docadd")
-public class docadd extends HttpServlet {
+@WebServlet("/dochome")
+public class dochome extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public docadd() {
+    public dochome() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,6 +35,7 @@ public class docadd extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -41,36 +43,33 @@ public class docadd extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String id=request.getParameter("id");
-		String name=request.getParameter("name");
-		String mail=request.getParameter("mail");
-		String phone=request.getParameter("ph");
-		String hos=request.getParameter("hos");
+		String em=request.getParameter("did");
+		String pw=request.getParameter("dpass");
 		HttpSession session=request.getSession();
-		if(session!=null) {
+		session.setAttribute("mail", em);
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/project","root","manager");
-			PreparedStatement ps=con.prepareStatement("insert into doctor values(?,?,?,?,?,?)");
-			ps.setString(1, id);
-			ps.setString(2, name);
-			ps.setString(3, mail);
-			ps.setString(4, phone);
-			ps.setString(5, hos);
-			ps.setInt(6, 0);
-			ps.execute();
-			response.sendRedirect("adminhome.html");
+			Statement st=con.createStatement();
+			ResultSet rs=st.executeQuery("select * from doctor");
+			PrintWriter out=response.getWriter();
+			boolean b=true;
+			while(rs.next()) {
+				if(rs.getString("mail").equals(em) && rs.getString("id").equals(pw)){
+					b=false;
+					break;
+				}
+			}
+			if(b)
+				out.println("Enter crct credentials");
+			else
+				response.sendRedirect("dochom");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		}
-		else {
-			PrintWriter out=response.getWriter();
-			out.println("Admin is not Logged in");
 		}
 	}
 

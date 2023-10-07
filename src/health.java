@@ -39,15 +39,18 @@ public class health extends HttpServlet {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/project","root","manager");
 			Statement st=con.createStatement();
-			ResultSet rs=st.executeQuery("select * from doctor");
+			ResultSet rs=st.executeQuery("select * from register");
 			String s="";
 			HttpSession session=request.getSession();
 			if(session.getAttribute("user")!=null) {
 			String l=(String) session.getAttribute("user");
 			while(rs.next()) {
-				s=s+rs.getString("mail")+",";
+				if(rs.getString("mail").equals(l)) {
+					s=rs.getString("doctor");
+					break;
+				}
 			}
-			s=s.substring(0, s.length()-1);
+			//s=s.substring(0, s.length()-1);
 			PrintWriter out=response.getWriter();
 			out.println("<!DOCTYPE html>\r\n" + 
 					"<html>\r\n" + 
@@ -131,11 +134,11 @@ public class health extends HttpServlet {
 					"<script>\r\n" + 
 					"    var k=Math.floor(Math.random()*41+70);\r\n" + 
 					"    var kk=Math.floor(Math.random()*3+36);\r\n" + 
-					"    var kkk=Math.floor(Math.random()*61+80);\r\n" + 
+					"    var kkk=Math.floor(Math.random()*61+70);\r\n" + 
 					"    document.getElementById(\"hh\").innerHTML=k+\"bpm\";\r\n" + 
 					"    document.getElementById(\"hhh\").innerHTML=kk+\"\\u00B0\"+\"C\";\r\n" + 
 					"    document.getElementById(\"h\").innerHTML=kkk+\"mg\";\r\n" + 
-					"    if(k>80 && kk>=38 && kkk>120){\r\n" + 
+					"    if((k>80 && kk>=38 && kkk>120) || (kk<60 && kk<=35 && kkk<75)){\r\n" + 
 					"        Email.send({\r\n" + 
 					"	Host: \"smtp.gmail.com\",\r\n" + 
 					"	Username : \"projectvir2@gmail.com\",\r\n" + 
@@ -148,7 +151,7 @@ public class health extends HttpServlet {
 					"		message => console.log(\"mail sent successfully\")\r\n" + 
 					"	);\r\n" + 
 					"    }\r\n" + 
-					"    else if(k>80){\r\n" + 
+					"    else if(k>80 || k<60){\r\n" + 
 					"        Email.send({\r\n" + 
 					"	Host: \"smtp.gmail.com\",\r\n" + 
 					"	Username : \"projectvir2@gmail.com\",\r\n" + 
@@ -161,7 +164,7 @@ public class health extends HttpServlet {
 					"		message => console.log(\"mail1 sent successfully\")\r\n" + 
 					"	);\r\n" + 
 					"    }\r\n" + 
-					"    else if(kk>=38){\r\n" + 
+					"    else if(kk>=38 || kk<=35){\r\n" + 
 					"        Email.send({\r\n" + 
 					"	Host: \"smtp.gmail.com\",\r\n" + 
 					"	Username : \"projectvir2@gmail.com\",\r\n" + 
@@ -174,7 +177,7 @@ public class health extends HttpServlet {
 					"		message => console.log(\"mail2 sent successfully\")\r\n" + 
 					"	);\r\n" + 
 					"    }\r\n" + 
-					"    else if(kkk>120){\r\n" + 
+					"    else if(kkk>120 || kkk<75){\r\n" + 
 					"        Email.send({\r\n" + 
 					"	Host: \"smtp.gmail.com\",\r\n" + 
 					"	Username : \"projectvir2@gmail.com\",\r\n" + 

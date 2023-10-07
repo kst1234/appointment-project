@@ -3,6 +3,11 @@
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,10 +42,23 @@ public class profile extends HttpServlet {
 		if(session==null)
 			out.println("No active accounts");
 		else {
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/project","root","manager");
+				
 		String s=(String)session.getAttribute("user");
 		String f=(String)session.getAttribute("fn");
 		String l=(String)session.getAttribute("ln");
-		
+		Statement st=con.createStatement();
+		ResultSet rs=st.executeQuery("select * from register");
+		String kk="",kkk="";
+		while(rs.next()) {
+			if(rs.getString("mail").equals(s)) {
+				kk=rs.getString("doctor");
+				kkk=rs.getString("docname");
+				break;
+			}
+		}
 		out.println("<head>");
 		out.println("<title>Profile</title>");
 		out.println("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css\">");
@@ -60,7 +78,7 @@ public class profile extends HttpServlet {
 				"            <span class=\"mr-auto\"></span>\r\n" + 
 				"            <ul class=\"navbar-nav\">\r\n" + 
 				"                <li class=\"nav-item\">\r\n" + 
-				"                    <a href=\"Home.html\" class=\"nav-link\">\r\n" + 
+				"                    <a href=\"home.html\" class=\"nav-link\">\r\n" + 
 				"                        <i class=\"fa fa-home\" aria-hidden=\"true\"></i>\r\n" + 
 				"                        Home\r\n" + 
 				"                    </a>\r\n" + 
@@ -85,12 +103,22 @@ public class profile extends HttpServlet {
 		out.println("<br><br><p>Welcome "+s+"</p>");
 		out.println("<br><p><b>Firstname:</b> "+f+"</p>");
 		out.println("<br><p><b>Lastname:</b> "+l+"</p>");
+		out.println("<br><p><b>Assigned Doctor Name:</b> "+kkk+"</p>");
+		out.println("<br><p><b>Assigned Doctor Mail:</b> "+kk+"</p>");
 		out.println("<br><br><a href=\"logout\">Logout</a> <i class=\"fa fa-sign-out\" aria-hidden=\"true\"></i>");
 		out.println("</div>");
 		out.println("</div>");
 		out.println("</div>");
 		out.println("</body>");
 		}
+		catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	}
 
 	/**

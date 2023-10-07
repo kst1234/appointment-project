@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -53,11 +54,35 @@ public class otp1 extends HttpServlet {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
 				Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/project","root","manager");
-				
+				Statement st=con.createStatement();
+				ResultSet rs=st.executeQuery("select * from register");
 				String m=(String) session.getAttribute("mail");
+				String ss="";
+				while(rs.next()) {
+					if(rs.getString("mail").equals(m)){
+						ss=rs.getString("doctor");
+						break;
+					}
+				}
+				int k1=1;
+				Statement st1=con.createStatement();
+				ResultSet rs1=st1.executeQuery("select * from doctor");
+				while(rs1.next()){
+					if(rs1.getString("mail").equals(ss)) {
+						k1=rs1.getInt("patno");
+						break;
+					}
+				}
+				PreparedStatement ps1=con.prepareStatement("update doctor set patno=? where mail=?");
+				ps1.setInt(1, k1-1);
+				ps1.setString(2, ss);
+				ps1.execute();
 				PreparedStatement ps=con.prepareStatement("delete from register where mail=?");
 				ps.setString(1, m);
 				ps.execute();
+				PreparedStatement ps2=con.prepareStatement("delete from date where mail=?");
+				ps2.setString(1, m);
+				ps2.execute();
 				response.sendRedirect("otpwrong.html");
 				session.invalidate();
 			} catch (ClassNotFoundException e) {

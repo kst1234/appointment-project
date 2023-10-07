@@ -50,6 +50,8 @@ public class RegisterServlet extends HttpServlet {
 		String f=request.getParameter("fn");
 		String l=request.getParameter("ln");
 		String k=request.getParameter("otp");
+		String d=request.getParameter("date");
+		String tt=request.getParameter("time");
 		PrintWriter out=response.getWriter();
 		HttpSession session=request.getSession();
 		session.setAttribute("mail", m);
@@ -68,12 +70,39 @@ public class RegisterServlet extends HttpServlet {
 				}
 			}
 			if(b) {
-				PreparedStatement ps=con.prepareStatement("insert into register values(?,?,?,?)");
+				int i=0;
+				ResultSet rs1=st.executeQuery("select * from doctor");
+				String s="",ss="";
+				while(rs1.next()) {
+					if(rs1.getInt("patno")<3) {
+						s=rs1.getString("mail");
+						ss=rs1.getString("name");
+						i=rs1.getInt("patno");
+						break;
+					}
+				}
+				PreparedStatement ps1=con.prepareStatement("update doctor set patno=? where mail=?");
+				ps1.setInt(1, i+1);
+				ps1.setString(2, s);
+				ps1.execute();
+				PreparedStatement ps=con.prepareStatement("insert into register values(?,?,?,?,?,?)");
+				
 			ps.setString(1, m);
 			ps.setString(2, p);
 			ps.setString(3, f);
 			ps.setString(4, l);
+			ps.setString(5, s);
+			ps.setString(6, ss);
 			ps.execute();
+			PreparedStatement ps2=con.prepareStatement("delete from deletepat where mail=?");
+			ps2.setString(1,m);
+			ps2.execute();
+			PreparedStatement ps3=con.prepareStatement("insert into date values(?,?,?)");
+			ps3.setString(1, m);
+			ps3.setString(2, d);
+			ps3.setString(3, tt);
+			ps3.execute();
+			System.out.println(d);
 			response.sendRedirect("otp.html");
 			}
 			else {

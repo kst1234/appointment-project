@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Admin Login</title>
+    <title>Doctor Login</title>
 <script src="https://use.fontawesome.com/e4aacdd27c.js"></script>
 <link href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
@@ -34,7 +34,7 @@ a{
     right:0;left:0;
     margin:auto;
     height:400px;
-    background-color: rgba(20, 186, 236, 0.9);
+    background-color: rgb(51, 204, 51);
 }
 .white-panel{
     background-color: rgba(255,255, 255, 1);
@@ -186,8 +186,8 @@ a{
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="docindex.html" class="nav-link active">
-                        <i class="fa fa-sign-in" aria-hidden="true"></i>Doctor Login
+                    <a href="adminindex.html" class="nav-link active">
+                        <i class="fa fa-sign-in" aria-hidden="true"></i>Admin Login
                     </a>
                 </li>
             </ul>
@@ -195,7 +195,7 @@ a{
     </nav>
   <div class="login-reg-panel">
     <div class="login-info-box">
-        <h2>Are you Admin?</h2>
+        <h2>Are you Doctor?</h2>
         <label id="label-register" for="log-reg-show">Login</label>
         <input type="radio" name="active-log-panel" id="log-reg-show"  checked="checked">
     </div>
@@ -203,14 +203,13 @@ a{
     
                         
     <div class="white-panel">
-    <form action="adminhome" method="post">
+    <form action="dochome" method="post">
         <div class="login-show">
-            <h2>LOGIN ADMIN</h2>
-            <input type="text" id="mail" placeholder="Email" name="aid">
-            <input type="password" id="pass" placeholder="Password" name="apass">
+            <h2>LOGIN DOCTOR</h2>
+            <input type="text" id="mail" placeholder="Email" name="did">
+            <input type="password" id="pass" placeholder="Password" name="dpass">
             <input type="submit" value="Login">
             <p id="hh"></p>
-            <a href="">Forgot password?</a>
         </div>
         </form>
     </div>

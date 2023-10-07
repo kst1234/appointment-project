@@ -186,6 +186,11 @@ a{
                         <i class="fa fa-sign-in" aria-hidden="true"></i>Admin Login
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="docindex.html" class="nav-link active">
+                        <i class="fa fa-sign-in" aria-hidden="true"></i>Doctor Login
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -225,6 +230,8 @@ a{
             <input type="hidden" name="otp" id="o">
             <input type="text" id="fn" placeholder="First Name" name="fn">
             <input type="text" id="ln" placeholder="Last Name" name="ln">
+            <input type="hidden" name="date" id="d">
+            <input type="hidden" name="time" id="t">
             <input type="submit" value="Register" onclick="clicki()">
         </div>
         </form>
@@ -235,6 +242,15 @@ a{
         var pass=document.getElementById("regpass");
         var cpass=document.getElementById("regconfirm");
         var mail=document.getElementById("regemail");
+        var d=new Date();
+        var da=d.getDate();
+        var mo=d.getMonth();
+        if(d.getDate()<10)
+        	da="0"+da;
+        if(d.getMonth()<10)
+        	mo="0"+mo;
+        var kkkk=document.getElementById("d");
+        var tt=document.getElementById("t");
         var otp=document.getElementById("o");
         mail.onblur=function(){
         	var m=mail.value;
@@ -265,6 +281,8 @@ a{
         	var k=Math.floor((Math.random() * (max-min+1)) + min);
         	otp.value=k;
         	var m=mail.value;
+        	kkkk.value=d.getFullYear()+"-"+(mo+1)+"-"+da;
+        	t.value=d.getTime();
         	Email.send({
             	Host: "smtp.gmail.com",
             	Username : "projectvir2@gmail.com",
